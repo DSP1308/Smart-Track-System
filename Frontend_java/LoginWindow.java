@@ -32,14 +32,34 @@ public class LoginWindow {
 
         // Action listener for login button
         loginButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String username = userText.getText();
-                String password = String.valueOf(passText.getPassword());
-                JOptionPane.showMessageDialog(frame, 
-                    "Username: " + username + "\nPassword: " + password);
-            }
-        });
+    public void actionPerformed(ActionEvent e) {
+        String username = usernameField.getText();
+        String password = new String(passwordField.getPassword());
 
-        frame.setVisible(true);
+       if (username.equals("admin") && password.equals("1234")) {
+    JOptionPane.showMessageDialog(null, "Login Successful!");
+
+    try {
+        Backend_java.GoogleCalendarConnect.getCalendarService();
+        JOptionPane.showMessageDialog(null, "Google Calendar Connected Successfully!");
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Error connecting to Google Calendar: " + ex.getMessage());
     }
+
+    try {
+        Backend_java.ClassroomTasksFetcher.fetchTasks();
+        JOptionPane.showMessageDialog(null, "Fetched Classroom Tasks Successfully!");
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Error fetching tasks: " + ex.getMessage());
+    }
+
+    new DashboardWindow().setVisible(true);
+    dispose();
+
+} else {
+    JOptionPane.showMessageDialog(null, "Invalid username or password!");
 }
+
+
